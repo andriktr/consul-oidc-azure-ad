@@ -8,6 +8,11 @@
   * [Variables for azure-ad-app-for-oidc module](#variables-for-azure-ad-app-for-oidc-module)
   * [Variables for oidc-auth-method module](#variables-for-oidc-auth-method-module)
   * [Variables for oidc-auth-binding module](#variables-for-oidc-auth-binding-module)
+* [Deployment](#deployment)
+* [Usage](#usage)
+* [Recommendations](#recommendations)
+* [Cleanup](#cleanup)
+* [Useful Documentation](#useful-documentation)
 
 ## Description
 
@@ -52,9 +57,9 @@ In order to deploy the solution you need to run the following commands:
 # Initialize Terraform
 terraform init
 # Plan the deployment
-terraform plan -var-file="environments/dev/variables.tfvars"
+terraform plan 
 # Apply configuration
-terraform apply -var-file="environments/test/variables.tfvars" 
+terraform apply
 ```
 
 ## Usage
