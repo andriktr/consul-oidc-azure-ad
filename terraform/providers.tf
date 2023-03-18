@@ -13,3 +13,10 @@ provider "consul" {
   datacenter = var.consul_datacenter
   token      = var.consul_token
 }
+
+provider "azuread" {}
+
+provider "azurerm" {
+  features {}
+}
+  

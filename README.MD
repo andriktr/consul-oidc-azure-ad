@@ -11,11 +11,11 @@
 
 ## Description
 
-Repository contains Terraform modules which will allow to quickly deploy Consul Enterprise with OIDC authentication method configured to use Azure AD as an identity provider.
+Repository contains Terraform modules to configure OIDC authentication method in Consul Enterprise using Azure AD as an identity provider.
 
 ## Prerequisites
 
-* OIDC authentication is supported in Consul Enterprise only.
+* OIDC authentication is supported in Consul Enterprise only. Version 1.8.0 or later is required.
 * Make sure you have appropriate permissions to create Azure AD applications and service principals.
 * Admin consent is required for the application to access the Microsoft Graph API. This is required for the application to be able to read the user's profile information. The admin consent can be granted by an Azure AD global administrator or by a user with the Global Administrator role assigned in the Azure portal.
 * Current configuration allows bind Azure AD groups to Consul ACL roles. Role will have a policy attached to it. Make sure you have appropriate permissions to create Azure AD security groups and ensure that token used to authenticate to Consul during the deployment has permissions to create ACL policies and roles.
@@ -24,7 +24,8 @@ Repository contains Terraform modules which will allow to quickly deploy Consul 
 
 Solution contains the following modules:
 
-* [azure-ad-app-for-oidc](./modules/azure-ad-app-for-oidc) - module to configure Consul OIDC integration with Azure AD.
+* [azure-ad-app-for-oidc](./modules/azure-ad-app-for-oidc) - creates Azure AD application and service principal which will be used to configure OIDC authentication method in Consul.
+
 * [oidc-auth-method](./modules/oidc-auth-method) - module to configure Consul OIDC authentication method.
 * [oidc-auth-binding](./modules/oidc-auth-binding) - module to bind Consul OIDC authentication method with ACL role and AAD group.
 
