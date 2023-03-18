@@ -1,3 +1,9 @@
+variable "consul_url" {
+  description = "The URL of the Consul server to use."
+  type = string
+  default = "https://consul-dev.balticit.ifint.biz"
+}
+
 variable "consul_token" {
   description = "The Consul ACL token which will be used to access Consul API"
   type        = string

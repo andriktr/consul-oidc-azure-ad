@@ -5,9 +5,12 @@
 * [Description](#description)
 * [Prerequisites](#prerequisites)
 * [Configuration](#configuration)
-  * [Variables for azure-ad-app-for-oidc module](#variables-for-azure-ad-app-for-oidc-module)
-  * [Variables for oidc-auth-method module](#variables-for-oidc-auth-method-module)
-  * [Variables for oidc-auth-binding module](#variables-for-oidc-auth-binding-module)
+  * [Modules](#modules)
+  * [Variables](#variables)
+    * [Variables for root module](#variables-for-root-module)
+    * [Variables for azure-ad-app-for-oidc module](#variables-for-azure-ad-app-for-oidc-module)
+    * [Variables for oidc-auth-method module](#variables-for-oidc-auth-method-module)
+    * [Variables for oidc-auth-binding module](#variables-for-oidc-auth-binding-module)
 * [Deployment](#deployment)
 * [Usage](#usage)
 * [Recommendations](#recommendations)
@@ -27,24 +30,37 @@ Repository contains Terraform modules to configure OIDC authentication method in
 
 ## Configuration
 
+Root variables.tf file contains the following variables
+
+### Modules
+
 Solution contains the following modules:
 
+* [root module](./main.tf) - loads other modules and sets variables for them.
 * [azure-ad-app-for-oidc](./modules/azure-ad-app-for-oidc) - creates Azure AD application and service principal which will be used to configure OIDC authentication method in Consul.
-
 * [oidc-auth-method](./modules/oidc-auth-method) - module to configure Consul OIDC authentication method.
 * [oidc-auth-binding](./modules/oidc-auth-binding) - module to bind Consul OIDC authentication method with ACL role and AAD group.
 
-### Variables for azure-ad-app-for-oidc module
+### Variables
+
+#### Variables for root module
+
+Variables for root module are defined in [variables.tf](./variables.tf) file and used in [main.tf](./main.tf) file. By default [variables.tf](./variables.tf) file contains variables required for consul terraform provider. You can add additional variables to [variables.tf](./variables.tf) file or create separate `variables.tfvars` file in the environment folder and pass it to the modules loaded in [main.tf](./main.tf) file.
+This approach allows you to set different values for variables in different environments and have a single main.tf file.
+
+Name | Description | Type |
+
+#### Variables for azure-ad-app-for-oidc module
 
 Name | Description | Type |
 ---- | ----------- | ---- |
 
-### Variables for oidc-auth-method module
+#### Variables for oidc-auth-method module
 
 Name | Description | Type |
 ---- | ----------- | ---- |
 
-### Variables for oidc-auth-binding module
+#### Variables for oidc-auth-binding module
 
 Name | Description | Type |
 ---- | ----------- | ---- |

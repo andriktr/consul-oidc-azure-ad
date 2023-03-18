@@ -9,7 +9,7 @@ terraform {
   }
 }
 provider "consul" {
-  address    = "https://consul-dev.balticit.ifint.biz"
+  address    = var.consul_url
   datacenter = var.consul_datacenter
   token      = var.consul_token
 }
