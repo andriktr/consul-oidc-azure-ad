@@ -30,8 +30,6 @@ Repository contains Terraform modules to configure OIDC authentication method in
 
 ## Configuration
 
-Root variables.tf file contains the following variables
-
 ### Modules
 
 Solution contains the following modules:
@@ -39,16 +37,47 @@ Solution contains the following modules:
 * [root module](./main.tf) - loads other modules and sets variables for them.
 * [azure-ad-app-for-oidc](./modules/azure-ad-app-for-oidc) - creates Azure AD application and service principal which will be used to configure OIDC authentication method in Consul.
 * [oidc-auth-method](./modules/oidc-auth-method) - module to configure Consul OIDC authentication method.
-* [oidc-auth-binding](./modules/oidc-auth-binding) - module to bind Consul OIDC authentication method with ACL role and AAD group.
+* [oidc-auth-binding](./modules/oidc-auth-binding) - module used to bind Consul OIDC authentication method with ACL role and AAD group.
 
 ### Variables
 
 #### Variables for root module
 
-Variables for root module are defined in [variables.tf](./variables.tf) file and used in [main.tf](./main.tf) file. By default [variables.tf](./variables.tf) file contains variables required for consul terraform provider. You can add additional variables to [variables.tf](./variables.tf) file or create separate `variables.tfvars` file in the environment folder and pass it to the modules loaded in [main.tf](./main.tf) file.
-This approach allows you to set different values for variables in different environments and have a single main.tf file.
+Variables for root module are defined in [variables.tf](./variables.tf) file and used in [main.tf](./main.tf) file. By default [variables.tf](./variables.tf) file contains variables required for consul terraform provider. You can add required variables to [variables.tf](./variables.tf) and create separate `variables.tfvars` file for each environment in [environments](./environments) folder. `variables.tfvars` file should contain values for variables defined in [variables.tf](./variables.tf) file. Then when you loading modules in [main.tf](./main.tf) instead of setting values for variables directly you can pass you can set them as a variable from `variables.tfvars` file. For example:
+
+Here is an example of how loaded module variables values can be set directly in [main.tf](./main.tf) file:
+
+```hcl
+module "demo_azure_ad_app_for_oidc" {
+  source = "./modules/azure-ad-app-for-oidc"
+  azure_ad_app_name = "consul-oidc-demo-aad-app"
+  azure_ad_app_owners = []
+  azure_ad_app_redirect_uri = []
+  azure_ad_app_access_token_issuance_enabled = true
+  azure_ad_app_id_token_issuance_enabled = true
+  azure_ad_app_group_membership_claims = ["All"]
+}
+```
+
+Here is an example of how to pass values from variables defined in [variables.tf](./variables.tf) and `variables.tfvars` files:
+
+```hcl
+module "demo_azure_ad_app_for_oidc" {
+  source = "./modules/azure-ad-app-for-oidc"
+  azure_ad_app_name = var.azure_ad_app_name # 
+  azure_ad_app_owners = var.azure_ad_app_owners 
+  azure_ad_app_redirect_uri = var.azure_ad_app_redirect_uri
+  azure_ad_app_access_token_issuance_enabled = var.azure_ad_app_access_token_issuance_enabled
+  azure_ad_app_id_token_issuance_enabled = var.azure_ad_app_id_token_issuance_enabled
+  azure_ad_app_group_membership_claims = var.azure_ad_app_group_membership_claims
+}
+```
+
+Using this approach requires you to pass `-var-file` parameter to `terraform plan` and `terraform apply` commands. See deployment section for more details.
+
 
 Name | Description | Type |
+---- | ----------- | ---- |
 
 #### Variables for azure-ad-app-for-oidc module
 
@@ -67,6 +96,7 @@ Name | Description | Type |
 
 ## Deployment
 
+For demo purposes our [main.tf](./main.tf) loads all three modules and sets values for their variables directly. In order to have single main.tf file for all environments you can create separate `variables.tfvars` files in the [environments](./environments) folder and pass it to  [main.tf](./main.tf) module. This approach allows you to set different values for variables in different environments and have a single main.tf file.
 In order to deploy the solution you need to run the following commands:
 
 ```bash

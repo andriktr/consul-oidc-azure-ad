@@ -12,6 +12,5 @@ output "azure_ad_application_service_principal_id" {
 }
 
 output "azure_ad_application_service_principal_password" {
-  #value = random_password.azure_ad_application_service_principal_password.result
   value = azuread_service_principal_password.azure_ad_application_service_principal_password.value
 }
