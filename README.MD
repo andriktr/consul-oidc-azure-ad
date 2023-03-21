@@ -122,15 +122,15 @@ Once the module is deployed AAD group members will be able to authenticate to Co
 
 1. Navigate to the Consul UI ([Consul Dev](consul-dev.balticit.ifint.bix) or [Consul Production](consul.balticit.ifint.biz)) and click on the "Login" button:
 
-<img src=./images/Login-1.jpg width=800, class="center">
+![Login step 1](Login-1.jpg "Login step 1]")
 
 2. Then select SSO option and enter `default` in partition field and click OK:
 
-<img src=./images/Login-2.jpg width=800, class="center">
+![Login step 2](Login-2.jpg "Login step 2]")
 
 3. Click on the "Continue with azure" button:
 
-<img src=./images/Login-3.jpg width=800, class="center">
+![Login step 3](Login-3.jpg "Login step 3]")
 
 4. On the next screen you will be redirected to the Azure AD login page or you will be logged into consul automatically if you are already logged in.
 
