@@ -118,19 +118,20 @@ terraform apply -var-file=environments/dev/variables.tfvars
 ```
 
 ## Usage
+
 Once the module is deployed AAD group members will be able to authenticate to Consul using OIDC and will be able to access resources based on the ACL policy attached to the role. Here is the step-by-step guide on how to login to Consul UI using OIDC and Azure AD:
 
 1. Navigate to the Consul UI ([Consul Dev](consul-dev.balticit.ifint.bix) or [Consul Production](consul.balticit.ifint.biz)) and click on the "Login" button:
 
-![Login step 1](./images/Login-1.jpg "Login step 1]")
+![Login step 1](./images/Login-1.jpg "Login step 1")
 
 2. Then select SSO option and enter `default` in partition field and click OK:
 
-![Login step 2](./images/Login-2.jpg "Login step 2]")
+![Login step 2](./images/Login-2.jpg "Login step 2")
 
 3. Click on the "Continue with azure" button:
 
-![Login step 3](./images/Login-3.jpg "Login step 3]")
+![Login step 3](./images/Login-3.jpg "Login step 3")
 
 4. On the next screen you will be redirected to the Azure AD login page or you will be logged into consul automatically if you are already logged in.
 
@@ -139,6 +140,7 @@ If you want to login as a different other than the one you are currently logged 
 
 P.P.S.
 Token expiration time is to 5 minutes. If you are not using the token for 5 minutes it will expire and you will need to login again.
+
 ## Recommendations
 
 ## Cleanup
