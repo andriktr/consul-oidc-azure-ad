@@ -10,9 +10,7 @@ module "demo_azure_ad_app_for_oidc" {
     "00000000-0000-0000-0000-000000000000"
   ]
   
-  azure_ad_app_redirect_uri = []
-
-  consul_oidc_redirect_uri = [
+  azure_ad_app_redirect_uri = [
     "https://localhost:8501/ui/oidc/callback",
     "http://localhost:8550/oidc/callback" 
     ]
@@ -34,9 +32,12 @@ module "demo_oidc_auth_method" {
   ]
   tenant_id = data.azurerm_client_config.current.tenant_id
   # If you loading azure_ad_app_for_oidc module and want to use the client_id and client_secret created by it 
-  # you can specify as follows overwise you can specify your own values
-  consul_oidc_client_id = module.demo_azure_ad_app_for_oidc.azure_ad_application_id
-  consul_oidc_client_secret = module.demo_azure_ad_app_for_oidc.azure_ad_application_service_principal_password
+  # you can specify as follows: 
+  #consul_oidc_client_id = module.demo_azure_ad_app_for_oidc.azure_ad_application_id
+  #consul_oidc_client_secret = module.demo_azure_ad_app_for_oidc.azure_ad_application_service_principal_password
+  # If you want to use your own precreates Azure AD App you can specify as follows:
+  consul_oidc_client_id = "00000000-0000-0000-0000-000000000000"
+  consul_oidc_client_secret = "00000000-0000-0000-0000-000000000000"
 }
 
 

@@ -33,5 +33,5 @@ variable "consul_oidc_client_id" {
 variable "consul_oidc_client_secret" {
   description = "The client secret to use for the Consul OIDC auth method."
   type = string
-  sensitive = true
+  #sensitive = true
 }

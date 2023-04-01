@@ -13,7 +13,6 @@
     * [Variables for oidc-auth-binding module](#variables-for-oidc-auth-binding-module)
 * [Deployment](#deployment)
 * [Usage](#usage)
-* [Recommendations](#recommendations)
 * [Cleanup](#cleanup)
 * [Useful Documentation](#useful-documentation)
 
@@ -90,7 +89,7 @@ azure_ad_app_owners | List of object IDs of Azure AD users or groups who will be
 azure_ad_app_redirect_uri | List of redirect URIs where the response to the authorization request can be sent and received by the Azure AD application. For example: "http://localhost:8550/oidc/callback","http://localhost:8500/ui/oidc/callback"
 azure_ad_app_access_token_issuance_enabled | Specifies whether this app can request an access token using the OAuth 2.0 authorization code flow. Typically should be set to `true` | bool
 azure_ad_app_id_token_issuance_enabled | Specifies whether this app can request an ID token using the OAuth 2.0 authorization code flow. Typically should be set to `true` | bool
-azure_ad_app_group_membership_claims | Specifies whether this app supports group membership claims. | string
+azure_ad_app_group_membership_claims | Specifies whether this app supports group membership claims. | list(string)
 
 #### Variables for oidc-auth-method module
 

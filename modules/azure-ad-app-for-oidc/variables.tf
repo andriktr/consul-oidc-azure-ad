@@ -19,7 +19,7 @@ variable "azure_ad_app_id_token_issuance_enabled" {
     type        = bool
 }
 variable "azure_ad_app_group_membership_claims" {
-    description = "Specifies whether this application supports group membership claims."
-    type        = string
+    description = "Specifies whether this application supports group membership claims"
+    type        = list(string)
 }
  
