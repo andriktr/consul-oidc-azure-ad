@@ -4,7 +4,7 @@
 
 ## Table of Contents
 
-* [Description](#description)1
+* [Description](#description)
 * [Prerequisites](#prerequisites)
 * [Configuration](#configuration)
   * [Modules](#modules)
