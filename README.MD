@@ -1,8 +1,10 @@
 # Terraform modules to configure authentication with OIDC and Azure AD for Consul Enterprise
 
+![Logo](./images/Logo.png "Logo")
+
 ## Table of Contents
 
-* [Description](#description)
+* [Description](#description)1
 * [Prerequisites](#prerequisites)
 * [Configuration](#configuration)
   * [Modules](#modules)
