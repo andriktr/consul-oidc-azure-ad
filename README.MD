@@ -1,4 +1,4 @@
-# Terraform modules to configure authentication with OIDC and Azure AD for Consul Enterprise (WORK IN PROGRESS - NOT READY FOR USE)
+# Terraform modules to configure authentication with OIDC and Azure AD for Consul Enterprise
 
 ## Table of Contents
 
@@ -77,25 +77,51 @@ Using this approach requires you to pass `-var-file` parameter to `terraform pla
 
 Name | Description | Type |
 ---- | ----------- | ---- |
+consul_url | The URL of the Consul server to use. | string |
+consul_token | The Consul ACL token to use. Requires high-privilege token as it is used to create ACL policies and roles. | string |
+consul_datacenter | The Consul datacenter to use. | string |
 
 #### Variables for azure-ad-app-for-oidc module
 
 Name | Description | Type |
 ---- | ----------- | ---- |
+azure_ad_app_name | Name of the Azure AD Application to be created and used for OIDC authentication. | string
+azure_ad_app_owners | List of object IDs of Azure AD users or groups who will be owners of the Azure AD Application. You can retrieve ID of a user or group from Azure portal or using Azure CLI by running `az ad user show --id <user_principal_name> --query id -otsv or` or `az ad group show --group <group_name> --query "id" -o tsv`. | list(string)
+azure_ad_app_redirect_uri | List of redirect URIs where the response to the authorization request can be sent and received by the Azure AD application. For example: "http://localhost:8550/oidc/callback","http://localhost:8500/ui/oidc/callback"
+azure_ad_app_access_token_issuance_enabled | Specifies whether this app can request an access token using the OAuth 2.0 authorization code flow. Typically should be set to `true` | bool
+azure_ad_app_id_token_issuance_enabled | Specifies whether this app can request an ID token using the OAuth 2.0 authorization code flow. Typically should be set to `true` | bool
+azure_ad_app_group_membership_claims | Specifies whether this app supports group membership claims. | string
 
 #### Variables for oidc-auth-method module
 
 Name | Description | Type |
 ---- | ----------- | ---- |
+tenant_id | The tenant ID of the Azure AD tenant in which the Azure AD application was created. | string |
+consul_auth_method_name | Name of the Consul OIDC authentication method. Defaults to `azure` | string |
+consul_auth_method_description | Description of the Consul OIDC authentication method. Defaults to `Azure OIDC authentication method` | string
+consul_acl_auth_method_max_token_ttl | The maximum allowed lifetime of tokens issued using this auth method. Defaults to `5m` | string
+consul_oidc_client_id | The client ID to use for the Consul OIDC auth method. Can be retrieved with the Azure CLI: `az ad sp list --display-name <app name> --query 'appId' -otsv`| string
+consul_oidc_client_secret | The client secret to use for the Consul OIDC auth method | string
+consul_oidc_redirect_uri | The redirect URI to use for the Consul OIDC auth method | list(string)
 
 #### Variables for oidc-auth-binding module
 
 Name | Description | Type |
 ---- | ----------- | ---- |
+consul_datacenter | The Consul datacenter to use. | string
+acl_policy_name | Name of the ACL policy to be created and attached to the role. | string
+acl_policy_rules | Rules of the ACL policy to be created and attached to the role. Make sure to use correct syntax [Consul ACL Policy Rules](https://developer.hashicorp.com/consul/docs/security/acl/acl-rules) | string
+acl_policy_description | Description of the ACL policy to be created and attached to the role. | string
+acl_role_name | Name of the ACL role to be created and attached to the Azure AD group. | string
+acl_role_description | Description of the ACL role to be created and attached to the Azure AD group. | string
+consul_auth_method_name | Name of the Consul OIDC authentication method. Defaults to `azure` | string
+binding_rule_name | Name of the binding rule to be created. | string
+binding_rule_description | Description of the binding rule to be created. | string
+aad_group_object_id | "The AAD group object ID to use in binding rule. You can find this in the Azure Portal or retrieve it with the Azure CLI by running: `az ad group show --group <group name> --query objectId --output tsv"` | string
 
 ## Deployment
 
-For demo purposes our [main.tf](./main.tf) loads all three modules and sets values for their variables directly. In order to have single main.tf file for all environments you can create separate `variables.tfvars` files in the [environments](./environments) folder and pass it to  [main.tf](./main.tf) module. This approach allows you to set different values for variables in different environments and have a single main.tf file.
+For demo purposes our [main.tf](./main.tf) loads all three modules and sets values for their variables directly. In order to have single main.tf file for all environments you can create separate `variables.tfvars` files in the [environments](./environments) folder and pass them to [main.tf](./main.tf) module. This approach allows you to set different values for variables in different environments and have a single `main.tf` file.
 In order to deploy the solution you need to run the following commands:
 
 If simply setting values for module variables in [main.tf](./main.tf) file:
@@ -109,7 +135,7 @@ terraform plan
 terraform apply
 ```
 
-If using `variables.tfvars` file assuming you are deploying to `dev` environment:
+If using approach with `variables.tfvars` files assuming you are deploying to `dev` environment:
 
 ```bash
 terraform init 
@@ -121,7 +147,7 @@ terraform apply -var-file=environments/dev/variables.tfvars
 
 Once the module is deployed AAD group members will be able to authenticate to Consul using OIDC and will be able to access resources based on the ACL policy attached to the role. Here is the step-by-step guide on how to login to Consul UI using OIDC and Azure AD:
 
-1. Navigate to the Consul UI ([Consul Dev](consul-dev.balticit.ifint.bix) or [Consul Production](consul.balticit.ifint.biz)) and click on the "Login" button:
+1. Navigate to the Consul UI and click on the "Login" button:
 
 ![Login step 1](./images/Login-1.jpg "Login step 1")
 
@@ -139,14 +165,35 @@ P.S.
 If you want to login as a different other than the one you are currently logged without logging it out you can start your browser in incognito/private mode and login as a different user.
 
 P.P.S.
-Token expiration time is to 5 minutes. If you are not using the token for 5 minutes it will expire and you will need to login again.
-
-## Recommendations
+Token expiration time is set to 5 minutes by default. If you are not using the token for 5 minutes it will expire and you will need to login again.
 
 ## Cleanup
+
+To destroy the resources run the following commands:
+
+If simply setting values for module variables in [main.tf](./main.tf) file:
+
+```bash
+# Initialize Terraform
+terraform init
+# Plan the deployment
+terraform plan -destroy
+# Apply configuration
+terraform destroy
+```
+
+If using approach with `variables.tfvars` files assuming you are deploying to `dev` environment:
+
+```bash
+terraform init 
+terraform plan -destroy -var-file=environments/dev/variables.tfvars
+terraform destroy -var-file=environments/dev/variables.tfvars
+```
 
 ## Useful Documentation
 
 [OpenID Connect (OIDC) Auth Method](https://developer.hashicorp.com/consul/docs/security/acl/auth-methods/oidc)
 
 [Authenticate Users with Single Sign-On (SSO) and Auth0](https://developer.hashicorp.com/consul/tutorials/datacenter-operations/single-sign-on-auth0)
+
+[Consul ACL Policy Rules](https://developer.hashicorp.com/consul/docs/security/acl/acl-rules)

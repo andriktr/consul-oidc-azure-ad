@@ -1,7 +1,7 @@
 variable "consul_url" {
   description = "The URL of the Consul server to use."
   type = string
-  default = "https://consul-dev.balticit.ifint.biz"
+  default = "https://localhost:8501"
 }
 
 variable "consul_token" {

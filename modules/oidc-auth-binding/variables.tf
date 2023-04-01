@@ -27,6 +27,7 @@ variable "acl_role_description" {
 variable "consul_auth_method_name" {
   description = "The name of the Consul auth method to use in binding rule."
   type = string
+  default = "azure"
 }
 
 variable "binding_rule_description" {
